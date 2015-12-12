@@ -548,30 +548,35 @@
 						<div class="row options-panel">
 							<div class="options">
 								<button class="btn btn-primary" id="trending-show">Trending in your jurisdiction</button>
-								<button class="btn btn-primary" type="button">Export</button>
+								<button class="btn btn-primary" onclick="DownloadJSON2CSV(dataSet)">Export</button>
 								<script type="text/javascript">
-									csv=["name","location","description","taggedAt","date"]; // Collect form values to this array.
+								    function DownloadJSON2CSV(objArray)
+								    {
+								        var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
 
-									function saveFile(csv){
-									    var fso,oStream;
-									    fso=new ActiveXObject('Scripting.FileSystemObject');
-									    oStream=fso.OpenTextFile('absolute_file_path',8,true);
-									    oStream.WriteLine(csv.join(','));
-									    oStream.Close();
-									    return;
-									}
-									
-									function readFile(path){
-									    var fso,iStream,n,csv=[];
-									    fso=new ActiveXObject('Scripting.FileSystemObject');
-									    iStream=fso.OpenTextFile(path,1,true);
-									    for(n=0;!iStream.AtEndOfStream;n++){
-									        csv[n]=iStream.ReadLine().split(',');
-									    }
-									    iStream.Close();
-									    return csv;
-									}
-								</script>
+								        var str = 'name,location,description,taggedAt,date' + '\r\n';
+
+								        for (var i = 0; i < array.length; i++) {
+								            var line = '';
+
+								            for (var index in array[i]) {
+								                line += array[i][index] + ',';
+								            }
+
+								            line.slice(0,line.Length-1); 
+
+								            str += line + '\r\n';
+								        }
+								        var uri = "data:text/csv;charset=utf-8," + escape(str)
+								        var link = document.createElement("a");    
+								        link.href = uri;
+								        link.style = "visibility:hidden";
+								        link.download = "export" + ".csv";
+								        document.body.appendChild(link);
+								        link.click();
+								        document.body.removeChild(link);
+								    }
+  								</script>
 							</div>
 						</div>
 					</div>
