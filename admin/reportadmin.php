@@ -548,6 +548,30 @@
 						<div class="row options-panel">
 							<div class="options">
 								<button class="btn btn-primary" id="trending-show">Trending in your jurisdiction</button>
+								<button class="btn btn-primary" type="button">Export</button>
+								<script type="text/javascript">
+									csv=["name","location","description","taggedAt","date"]; // Collect form values to this array.
+
+									function saveFile(csv){
+									    var fso,oStream;
+									    fso=new ActiveXObject('Scripting.FileSystemObject');
+									    oStream=fso.OpenTextFile('absolute_file_path',8,true);
+									    oStream.WriteLine(csv.join(','));
+									    oStream.Close();
+									    return;
+									}
+									
+									function readFile(path){
+									    var fso,iStream,n,csv=[];
+									    fso=new ActiveXObject('Scripting.FileSystemObject');
+									    iStream=fso.OpenTextFile(path,1,true);
+									    for(n=0;!iStream.AtEndOfStream;n++){
+									        csv[n]=iStream.ReadLine().split(',');
+									    }
+									    iStream.Close();
+									    return csv;
+									}
+								</script>
 							</div>
 						</div>
 					</div>
